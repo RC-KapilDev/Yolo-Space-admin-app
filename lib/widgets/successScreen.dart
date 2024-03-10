@@ -46,6 +46,7 @@ class SuccessScreen extends StatelessWidget {
             // Success message
             Text(
               'Room Detail Entred is  Successful',
+              textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,

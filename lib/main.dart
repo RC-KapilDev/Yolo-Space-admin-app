@@ -53,8 +53,8 @@ class MyAppState extends State<MyApp> {
       showError('Please Enter an Image');
       allConditionsMet = false;
     }
-    if (address.isEmpty) {
-      showError('Please Enter a Valid Address');
+    if (address.length <= 20) {
+      showError('Please Enter a Valid Address with 20 Character');
       allConditionsMet = false;
     }
     if (rent <= 1000 && rent >= 0) {
@@ -277,12 +277,17 @@ class MyAppState extends State<MyApp> {
               ),
               Row(
                 children: [
-                  const Text(
-                    'Room Accomodation Type *',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
+                  const Expanded(
+                    child: Text(
+                      'Room Accomodation Type',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
+                  ),
+                  const SizedBox(
+                    width: 10,
                   ),
                   DropDownSex(),
                 ],
@@ -326,7 +331,8 @@ class MyAppState extends State<MyApp> {
                 SizedBox(
                   width: 10,
                 ),
-                Text('Wait For a moment files needs to be uploaded')
+                Expanded(
+                    child: Text('Wait For a moment files needs to be uploaded'))
               ],
             ),
             child: Carousel(

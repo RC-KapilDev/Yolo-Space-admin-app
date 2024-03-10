@@ -20,6 +20,7 @@ class UnsuccessfulScreen extends StatelessWidget {
             // Error message
             Text(
               'Room Detail Entred is  UnSuccessful',
+              textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
