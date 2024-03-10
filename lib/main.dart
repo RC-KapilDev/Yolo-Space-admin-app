@@ -43,7 +43,7 @@ class MyAppState extends State<MyApp> {
   TextEditingController controller = TextEditingController();
   TextEditingController _rentController = TextEditingController();
   String _rentValue = '';
-  Sex? selectedSex = Sex.male;
+  String selectedSexString = 'unisex';
 
   void _submitRoomDetails() {
     int? rent = int.tryParse(_rentValue) ?? 0;
@@ -69,6 +69,10 @@ class MyAppState extends State<MyApp> {
       showError('Please Enter Area and City');
       allConditionsMet = false;
     }
+    if (selectedSexString.isEmpty) {
+      showError('Please Enter Valid Type');
+      allConditionsMet = false;
+    }
 
     if (allConditionsMet) {
       final value = _selectedAmenities.length;
@@ -87,8 +91,7 @@ class MyAppState extends State<MyApp> {
         return {
           "roomtype": roomtype,
           "location": _selectedLocations,
-          "sex": selectedSex
-              ?.name, // Assuming Sex is an enum and needs to be converted to string
+          "sex": selectedSexString,
           "amenities": _selectedAmenities,
           "rent": int.tryParse(_rentValue) ?? 0,
           "address": address,
@@ -103,9 +106,10 @@ class MyAppState extends State<MyApp> {
   void postRoomDetails(
       BuildContext context, Map<String, dynamic> roomDetails) async {
     String jsonData = jsonEncode(roomDetails);
+    print(jsonData);
 
     // Set up the POST request
-    var url = Uri.parse('https://sore-jade-jay-wig.cyclic.app/yolo/room');
+    var url = Uri.parse('http://192.168.1.2:3000/yolo/room');
     var response = await http.post(
       url,
       headers: <String, String>{
@@ -113,6 +117,7 @@ class MyAppState extends State<MyApp> {
       },
       body: jsonData,
     );
+    print(response.body);
     // Check the response status
     if (response.statusCode == 200) {
       // Request successful
@@ -202,12 +207,6 @@ class MyAppState extends State<MyApp> {
     }).toList();
   }
 
-  void selectSex(Sex newValue) {
-    setState(() {
-      selectedSex = newValue;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -281,11 +280,10 @@ class MyAppState extends State<MyApp> {
                   const Text(
                     'Room Accomodation Type *',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const Spacer(),
                   DropDownSex(),
                 ],
               ),
@@ -355,17 +353,17 @@ class MyAppState extends State<MyApp> {
     );
   }
 
-  DropdownButton<Sex> DropDownSex() {
-    return DropdownButton<Sex>(
-      value: selectedSex,
-      onChanged: (Sex? newValue) {
+  DropdownButton<String> DropDownSex() {
+    return DropdownButton<String>(
+      value: selectedSexString,
+      onChanged: (String? newValue) {
         setState(() {
-          selectedSex = newValue ?? Sex.unisex;
+          selectedSexString = (newValue ?? 'unisex').toLowerCase();
         });
       },
       items: Sex.values.map((sex) {
-        return DropdownMenuItem<Sex>(
-          value: sex,
+        return DropdownMenuItem<String>(
+          value: sex.toString().split('.').last.toLowerCase(),
           child: Text(sex.toString().split('.').last.toUpperCase()),
         );
       }).toList(),
