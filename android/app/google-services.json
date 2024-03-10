@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "350355068799",
+    "project_id": "test-e61bd",
+    "storage_bucket": "test-e61bd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:350355068799:android:463a4ca497b2198a6bac4a",
+        "android_client_info": {
+          "package_name": "com.example.test_application"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXO7_gnZ2-pJpmZnLSWXJObDjAW1jzdCk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:350355068799:android:ec7a14a1a042234e6bac4a",
+        "android_client_info": {
+          "package_name": "com.google.firebase.kapildev.demo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXO7_gnZ2-pJpmZnLSWXJObDjAW1jzdCk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:350355068799:android:ce639753902077a56bac4a",
+        "android_client_info": {
+          "package_name": "com.kapildev_dev.test_application"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXO7_gnZ2-pJpmZnLSWXJObDjAW1jzdCk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
