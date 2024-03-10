@@ -105,7 +105,7 @@ class MyAppState extends State<MyApp> {
     String jsonData = jsonEncode(roomDetails);
 
     // Set up the POST request
-    var url = Uri.parse('http://192.168.1.2:3000/yolo/room');
+    var url = Uri.parse('https://sore-jade-jay-wig.cyclic.app/yolo/room');
     var response = await http.post(
       url,
       headers: <String, String>{
