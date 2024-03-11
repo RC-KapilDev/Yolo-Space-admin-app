@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class SuccessScreen extends StatelessWidget {
+  const SuccessScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +19,7 @@ class SuccessScreen extends StatelessWidget {
               children: [
                 // Animated container to create a padding around the circles
                 AnimatedContainer(
-                  duration: Duration(milliseconds: 500),
+                  duration: const Duration(milliseconds: 500),
                   width: 120,
                   height: 120,
                   decoration: BoxDecoration(
@@ -26,7 +28,7 @@ class SuccessScreen extends StatelessWidget {
                   ),
                 ),
                 // SpinKitDoubleBounce with adjusted size and position
-                Positioned(
+                const Positioned(
                   left: 10,
                   top: 10,
                   child: SpinKitDoubleBounce(
@@ -35,16 +37,16 @@ class SuccessScreen extends StatelessWidget {
                   ),
                 ),
                 // Tick mark
-                Icon(
+                const Icon(
                   Icons.check_circle,
                   color: Colors.white,
                   size: 100.0,
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             // Success message
-            Text(
+            const Text(
               'Room Detail Entred is  Successful',
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -53,10 +55,11 @@ class SuccessScreen extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             // Button to navigate back or perform another action
             ElevatedButton(
               onPressed: () {
+                Navigator.pop(context);
                 Navigator.push(
                   context,
                   MaterialPageRoute(

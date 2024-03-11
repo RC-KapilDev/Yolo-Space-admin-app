@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:yolo_business/Screens/checkscreen.dart';
+import 'package:yolo_business/Screens/deleteScreen.dart';
 import 'package:yolo_business/widgets/carousel.dart';
 import 'package:yolo_business/widgets/divideline.dart';
 import 'package:yolo_business/widgets/sidenavigation.dart';
@@ -126,7 +127,7 @@ class MyAppState extends State<MyApp> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => SuccessScreen(),
+          builder: (context) => const SuccessScreen(),
         ),
       );
     } else {
@@ -363,10 +364,6 @@ class MyAppState extends State<MyApp> {
               onPressed: _pickImages,
               child: const Text('Pick Image'),
             ),
-            // ElevatedButton(
-            //   onPressed: _uploadImages,
-            //   child: Text('Upload Images'),
-            // ),
           ],
         ),
       ],

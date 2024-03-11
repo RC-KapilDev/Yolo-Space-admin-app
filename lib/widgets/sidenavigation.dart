@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yolo_business/Screens/checkscreen.dart';
+import 'package:yolo_business/Screens/deleteScreen.dart';
 import 'package:yolo_business/main.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -51,6 +52,19 @@ class AppDrawer extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => const CheckScreen(),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.check_circle,
+                color: Color.fromARGB(255, 62, 16, 114)),
+            title: const Text('Room Details Delete'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const DeleteScreen(),
                 ),
               );
             },

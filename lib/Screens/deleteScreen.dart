@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:yolo_business/model/dataModel.dart';
-import 'package:yolo_business/services/reservation_services.dart';
 
 import 'package:yolo_business/widgets/carousel.dart';
 import 'package:yolo_business/widgets/displayroomtypes.dart';
@@ -17,14 +16,14 @@ void showSnackBar(BuildContext context, String text) {
   );
 }
 
-class CheckScreen extends StatefulWidget {
-  const CheckScreen({super.key});
+class DeleteScreen extends StatefulWidget {
+  const DeleteScreen({super.key});
 
   @override
-  State<CheckScreen> createState() => _CheckScreenState();
+  State<DeleteScreen> createState() => _DeleteScreenState();
 }
 
-class _CheckScreenState extends State<CheckScreen> {
+class _DeleteScreenState extends State<DeleteScreen> {
   bool visible = false;
   Duration duration = const Duration(seconds: 10);
   Timer? timer;
@@ -37,8 +36,8 @@ class _CheckScreenState extends State<CheckScreen> {
 
   Future<void> fetch() async {
     try {
-      final response = await http.get(
-          Uri.parse('https://sore-jade-jay-wig.cyclic.app/validate/rooms'));
+      final response = await http
+          .get(Uri.parse('https://sore-jade-jay-wig.cyclic.app/yolo/rooms'));
       if (response.statusCode == 200) {
         setState(() {
           reservedRoom = parseReservationFromJson(response.body);
@@ -79,8 +78,8 @@ class _CheckScreenState extends State<CheckScreen> {
 
   void removeFav(String id) async {
     try {
-      final response = await http.delete(
-          Uri.parse('https://sore-jade-jay-wig.cyclic.app/validate/$id'));
+      final response = await http
+          .delete(Uri.parse('https://sore-jade-jay-wig.cyclic.app/yolo/$id'));
       if (response.statusCode == 200) {
         setState(() {
           reservedRoom.removeWhere((room) => room.id == id); // Remove from list
@@ -107,9 +106,21 @@ class _CheckScreenState extends State<CheckScreen> {
     });
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Room Upload Requests'),
+          title: const Text('Room Details Delete'),
           backgroundColor: const Color.fromARGB(255, 0, 0, 0),
           foregroundColor: Colors.white,
+          actions: [
+            IconButton(
+                onPressed: () {
+                  showSearch(
+                      context: context,
+                      delegate: MySearchDelegate(
+                          roomList: reservedRoom,
+                          onrem: removeitem,
+                          onta: removeFav));
+                },
+                icon: const Icon(Icons.search))
+          ],
         ),
         body: Scaffold(
           body: Visibility(
@@ -243,12 +254,17 @@ class RoomCardResrvation extends StatelessWidget {
                       const Text('Monthly Rent '),
                       Row(
                         children: [
-                          Text(
-                            room.rent.toString(),
-                            style: const TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.w600),
+                          Expanded(
+                            child: Text(
+                              room.rent.toString(),
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w600),
+                            ),
                           ),
                           const Text(' Onwards'),
+                          const SizedBox(
+                            width: 10,
+                          )
                         ],
                       )
                     ],
@@ -379,7 +395,7 @@ class _DisplayRoomReservationState extends State<DisplayRoomReservation> {
                             foregroundColor: Colors.white,
                             child: Center(
                                 child:
-                                    Text('+ ${roomObj.amenities.length - 4}'))),
+                                    Text('+${roomObj.amenities.length - 4}'))),
                       ))
                   ],
                 ),
@@ -580,29 +596,20 @@ class _DisplayRoomReservationState extends State<DisplayRoomReservation> {
         children: [
           ElevatedButton(
             onPressed: () {
-              widget.ontap(widget.room.id);
-              showSnackBar(context, 'Rejected Details');
-              Navigator.pop(context);
+              setState(() {
+                widget.ontap(widget.room.id);
+                showSnackBar(context, 'Rejected Details');
+                widget.onremove(widget.room.id);
+                Navigator.pop(context);
+              });
             },
             child: const Text(
-              'Reject',
-              style: TextStyle(color: Colors.red),
+              'Delete',
+              style: TextStyle(
+                  color: Colors.red, fontSize: 15, fontWeight: FontWeight.w500),
             ),
           ),
           const Spacer(),
-          ElevatedButton(
-            onPressed: () {
-              ReservationServices service = ReservationServices();
-              service.approvedRoom(widget.room, context);
-              showSnackBar(context, 'Approved Details');
-              widget.onremove(widget.room.id);
-              Navigator.pop(context);
-            },
-            child: const Text(
-              'Approved',
-              style: TextStyle(color: Colors.green),
-            ),
-          ),
         ],
       ),
     );
@@ -671,5 +678,104 @@ class DisplayRoomTileReservation extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class MySearchDelegate extends SearchDelegate {
+  MySearchDelegate(
+      {required this.roomList, required this.onrem, required this.onta});
+  final List<RoomReservation> roomList;
+  final void Function(String id) onta;
+  final void Function(String id) onrem;
+
+  void displayScreen(RoomReservation room, BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => DisplayRoomReservation(
+                  room: room,
+                  onremove: onrem,
+                  ontap: onta,
+                )));
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) => IconButton(
+        onPressed: () => close(context, null),
+        icon: const Icon(Icons.arrow_back),
+      );
+
+  @override
+  List<Widget>? buildActions(BuildContext context) => [
+        IconButton(
+          onPressed: () {
+            if (query.isEmpty) {
+              close(context, null);
+            } else {
+              query = '';
+            }
+          },
+          icon: const Icon(Icons.clear),
+        ),
+      ];
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    final Set<String> uniqueLocations = <String>{};
+    final List<RoomReservation> suggestions = query.isEmpty
+        ? []
+        : roomList.where((room) {
+            final input = query.toLowerCase();
+            final containsInput = room.location
+                .any((location) => location.toLowerCase().contains(input));
+            if (containsInput) {
+              uniqueLocations
+                  .addAll(room.location); // Add all unique locations to the set
+            }
+            return containsInput;
+          }).toList();
+
+    return ListView.builder(
+      itemCount: uniqueLocations.length,
+      itemBuilder: (context, index) {
+        final location = uniqueLocations.elementAt(index);
+        return ListTile(
+          title: Text(location),
+          onTap: () {
+            query = location; // Set the query to the selected location
+            showResults(context);
+          },
+        );
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    final List<RoomReservation> searchResults = roomList.where((room) {
+      final input = query.toLowerCase();
+      return room.location
+          .any((location) => location.toLowerCase().contains(input));
+    }).toList();
+
+    if (searchResults.isEmpty) {
+      return Center(
+        child: Text('No results found for "$query"'),
+      );
+    } else {
+      return ListView.builder(
+        itemCount: searchResults.length,
+        itemBuilder: (context, index) {
+          final RoomReservation room = searchResults[index];
+          return Dismissible(
+              key: ValueKey(room.id),
+              onDismissed: (direction) => onta(room.id),
+              background: Container(
+                color: Colors.red,
+              ),
+              child: RoomCardResrvation(room: room, onTap: displayScreen));
+        },
+      );
+    }
   }
 }
