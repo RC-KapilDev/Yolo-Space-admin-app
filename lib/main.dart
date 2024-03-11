@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+import 'package:yolo_business/Screens/checkscreen.dart';
 import 'package:yolo_business/widgets/carousel.dart';
 import 'package:yolo_business/widgets/divideline.dart';
+import 'package:yolo_business/widgets/sidenavigation.dart';
 import 'package:yolo_business/widgets/successScreen.dart';
 import 'package:yolo_business/widgets/unsuccessScreen.dart';
 import 'dart:convert';
@@ -34,14 +36,14 @@ class MyAppState extends State<MyApp> {
   List<XFile?> _selectedImages = [];
   List<String> _imageUrls = [];
   bool visible = false;
-  TextEditingController _locationController = TextEditingController();
-  List<String> _selectedLocations = [];
-  List<String> _selectedAmenities = [];
-  TextEditingController _addressController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
+  final List<String> _selectedLocations = [];
+  final List<String> _selectedAmenities = [];
+  final TextEditingController _addressController = TextEditingController();
   String address = '';
   final GlobalKey<AutoCompleteTextFieldState<String>> key = GlobalKey();
   TextEditingController controller = TextEditingController();
-  TextEditingController _rentController = TextEditingController();
+  final TextEditingController _rentController = TextEditingController();
   String _rentValue = '';
   String selectedSexString = 'unisex';
 
@@ -49,7 +51,7 @@ class MyAppState extends State<MyApp> {
     int? rent = int.tryParse(_rentValue) ?? 0;
     bool allConditionsMet = true;
 
-    if (_selectedImages.length == 0) {
+    if (_selectedImages.isEmpty) {
       showError('Please Enter an Image');
       allConditionsMet = false;
     }
@@ -61,11 +63,11 @@ class MyAppState extends State<MyApp> {
       showError('Please Enter a valid Rent Above 1000 ');
       allConditionsMet = false;
     }
-    if (_selectedAmenities.length == 0) {
+    if (_selectedAmenities.isEmpty) {
       showError('Please Enter at least one Amenity');
       allConditionsMet = false;
     }
-    if (_selectedLocations.length == 0) {
+    if (_selectedLocations.isEmpty) {
       showError('Please Enter Area and City');
       allConditionsMet = false;
     }
@@ -109,7 +111,7 @@ class MyAppState extends State<MyApp> {
     print(jsonData);
 
     // Set up the POST request
-    var url = Uri.parse('https://sore-jade-jay-wig.cyclic.app/yolo/room');
+    var url = Uri.parse('https://sore-jade-jay-wig.cyclic.app/validate/room');
     var response = await http.post(
       url,
       headers: <String, String>{
@@ -158,9 +160,7 @@ class MyAppState extends State<MyApp> {
     final imagePicker = ImagePicker();
     final pickedFileList = await imagePicker.pickMultiImage();
     setState(() {
-      if (pickedFileList != null) {
-        _selectedImages = pickedFileList;
-      }
+      _selectedImages = pickedFileList;
     });
     _uploadImages();
   }
@@ -208,110 +208,124 @@ class MyAppState extends State<MyApp> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _rentController.clear();
+    controller.clear();
+    _addressController.clear();
+    _locationController.clear();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Yolo Rooms'),
-        ),
-        body: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-          child: ListView(
-            children: [
-              const Text(
-                'Enter Details',
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              const Text(
-                'Enter Area and City *',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+      // showPerformanceOverlay: true,
+      home: SafeArea(
+        child: Scaffold(
+          drawer: const AppDrawer(),
+          appBar: AppBar(
+            title: const Text('Yolo Rooms'),
+          ),
+          body: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+            child: ListView(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              children: [
+                const Text(
+                  'Enter Details',
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
                 ),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              LocationInput(),
-              const DividerLine(),
-              const SizedBox(
-                height: 15,
-              ),
-              ShowOptions(),
-              const SizedBox(
-                height: 15,
-              ),
-              const DividerLine(),
-              const SizedBox(
-                height: 15,
-              ),
-              const Text(
-                'Enter Rent Amount *',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+                const SizedBox(
+                  height: 15,
                 ),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              RentWidget(),
-              const SizedBox(
-                height: 15,
-              ),
-              const DividerLine(),
-              const SizedBox(
-                height: 15,
-              ),
-              AddressTextWidget(),
-              const SizedBox(
-                height: 15,
-              ),
-              const DividerLine(),
-              const SizedBox(
-                height: 15,
-              ),
-              Row(
-                children: [
-                  const Expanded(
-                    child: Text(
-                      'Room Accomodation Type',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
+                const Text(
+                  'Enter Area and City *',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                LocationInput(),
+                const DividerLine(),
+                const SizedBox(
+                  height: 15,
+                ),
+                ShowOptions(),
+                const SizedBox(
+                  height: 15,
+                ),
+                const DividerLine(),
+                const SizedBox(
+                  height: 15,
+                ),
+                const Text(
+                  'Enter Rent Amount *',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                RentWidget(),
+                const SizedBox(
+                  height: 15,
+                ),
+                const DividerLine(),
+                const SizedBox(
+                  height: 15,
+                ),
+                AddressTextWidget(),
+                const SizedBox(
+                  height: 15,
+                ),
+                const DividerLine(),
+                const SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  children: [
+                    const Expanded(
+                      child: Text(
+                        'Room Accomodation Type',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  DropDownSex(),
-                ],
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              const DividerLine(),
-              const SizedBox(
-                height: 15,
-              ),
-              ImagesWidgets(),
-              const SizedBox(
-                height: 15,
-              ),
-              const DividerLine(),
-              const SizedBox(
-                height: 15,
-              ),
-              ElevatedButton(
-                onPressed: visible ? _submitRoomDetails : null,
-                child: const Text('Submit Details'),
-              )
-            ],
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    DropDownSex(),
+                  ],
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                const DividerLine(),
+                const SizedBox(
+                  height: 15,
+                ),
+                ImagesWidgets(),
+                const SizedBox(
+                  height: 15,
+                ),
+                const DividerLine(),
+                const SizedBox(
+                  height: 15,
+                ),
+                ElevatedButton(
+                  onPressed: visible ? _submitRoomDetails : null,
+                  child: const Text('Submit Details'),
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -384,24 +398,24 @@ class MyAppState extends State<MyApp> {
             keyboardType: TextInputType.text,
             decoration: InputDecoration(
               hintText: 'Enter text',
-              hintStyle: TextStyle(color: Colors.grey),
+              hintStyle: const TextStyle(color: Colors.grey),
               filled: true,
               fillColor: Colors.white,
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide(color: Colors.grey, width: 2.0),
+                borderSide: const BorderSide(color: Colors.grey, width: 2.0),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide(color: Colors.blue, width: 2.0),
+                borderSide: const BorderSide(color: Colors.blue, width: 2.0),
               ),
-              prefixIcon: Icon(Icons.text_fields),
+              prefixIcon: const Icon(Icons.text_fields),
             ),
           ),
         ),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         IconButton(
-          icon: Icon(Icons.arrow_forward),
+          icon: const Icon(Icons.arrow_forward),
           onPressed: () {
             // Handle the submission of text here
           },
@@ -414,43 +428,43 @@ class MyAppState extends State<MyApp> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
+        const Text(
           'Enter Address *',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20.0,
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         TextField(
           keyboardType: TextInputType.multiline,
           maxLines: null, // Allow unlimited number of lines
           controller: _addressController,
           decoration: InputDecoration(
             hintText: 'Enter your address...',
-            hintStyle: TextStyle(color: Colors.grey),
+            hintStyle: const TextStyle(color: Colors.grey),
             filled: true,
             fillColor: Colors.white,
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(color: Colors.grey, width: 2.0),
+              borderSide: const BorderSide(color: Colors.grey, width: 2.0),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(color: Colors.blue, width: 2.0),
+              borderSide: const BorderSide(color: Colors.blue, width: 2.0),
             ),
           ),
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Text(
-          'Address: ${address}',
-          style: TextStyle(
+          'Address: $address',
+          style: const TextStyle(
             fontSize: 16.0,
             color: Colors.redAccent,
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         ElevatedButton(
           onPressed: () {
             setState(() {
@@ -460,7 +474,7 @@ class MyAppState extends State<MyApp> {
 
             print('Address submitted: $address');
           },
-          child: Text('Confirm Address'),
+          child: const Text('Confirm Address'),
         ),
       ],
     );
@@ -478,20 +492,22 @@ class MyAppState extends State<MyApp> {
                 controller: _rentController,
                 decoration: InputDecoration(
                   hintText: 'Enter rent amount',
-                  hintStyle: TextStyle(color: Colors.grey),
+                  hintStyle: const TextStyle(color: Colors.grey),
                   filled: true,
                   fillColor: Colors.white,
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(color: Colors.grey, width: 2.0),
+                    borderSide:
+                        const BorderSide(color: Colors.grey, width: 2.0),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(color: Colors.blue, width: 2.0),
+                    borderSide:
+                        const BorderSide(color: Colors.blue, width: 2.0),
                   ),
-                  prefixIcon: Icon(Icons.currency_exchange),
+                  prefixIcon: const Icon(Icons.currency_exchange),
                   suffixIcon: IconButton(
-                    icon: Icon(Icons.clear),
+                    icon: const Icon(Icons.clear),
                     onPressed: () {
                       _rentController.clear();
                       setState(() {
@@ -502,9 +518,9 @@ class MyAppState extends State<MyApp> {
                 ),
               ),
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             IconButton(
-              icon: Icon(Icons.arrow_forward),
+              icon: const Icon(Icons.arrow_forward),
               onPressed: () {
                 setState(() {
                   _rentValue = _rentController.text;
@@ -514,10 +530,10 @@ class MyAppState extends State<MyApp> {
             ),
           ],
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Text(
           'Rent: $_rentValue',
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.redAccent,
             fontSize: 16.0,
@@ -542,17 +558,19 @@ class MyAppState extends State<MyApp> {
                   fillColor: Colors.white,
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(color: Colors.grey, width: 2.0),
+                    borderSide:
+                        const BorderSide(color: Colors.grey, width: 2.0),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(color: Colors.blue, width: 2.0),
+                    borderSide:
+                        const BorderSide(color: Colors.blue, width: 2.0),
                   ),
                   labelText: 'Enter Area and City',
-                  labelStyle: TextStyle(color: Colors.grey),
-                  prefixIcon: Icon(Icons.location_on),
+                  labelStyle: const TextStyle(color: Colors.grey),
+                  prefixIcon: const Icon(Icons.location_on),
                   suffixIcon: IconButton(
-                    icon: Icon(Icons.clear),
+                    icon: const Icon(Icons.clear),
                     onPressed: () {
                       _locationController.clear();
                     },
@@ -560,7 +578,7 @@ class MyAppState extends State<MyApp> {
                 ),
               ),
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             ElevatedButton(
               onPressed: () {
                 setState(() {
@@ -569,12 +587,12 @@ class MyAppState extends State<MyApp> {
                 });
                 print(_selectedLocations);
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         ),
-        SizedBox(height: 20),
-        Text(
+        const SizedBox(height: 20),
+        const Text(
           'Selected Locations:',
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -582,7 +600,7 @@ class MyAppState extends State<MyApp> {
             fontSize: 16.0,
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Wrap(
           spacing: 10.0,
           children: _selectedLocations.map((location) {
@@ -611,7 +629,7 @@ class MyAppState extends State<MyApp> {
             fontSize: 20.0,
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Wrap(
           spacing: 10.0,
           children: Amenities.values.map((amenity) {
@@ -632,8 +650,8 @@ class MyAppState extends State<MyApp> {
             );
           }).toList(),
         ),
-        SizedBox(height: 20),
-        Text(
+        const SizedBox(height: 20),
+        const Text(
           'Selected Amenities:',
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -641,7 +659,7 @@ class MyAppState extends State<MyApp> {
             fontSize: 16.0,
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Wrap(
           spacing: 10.0,
           children: _selectedAmenities.map((amenity) {

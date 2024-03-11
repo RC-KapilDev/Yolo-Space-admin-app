@@ -20,7 +20,7 @@ enum Amenities {
 
 enum Sex { male, female, unisex }
 
-final amenitiesIcons = {
+final amenitiesIconsReservation = {
   Amenities.parking: Image.asset('lib/icons/parking.png'),
   Amenities.ac: Image.asset('lib/icons/air-conditioning.png'),
   Amenities.wifi: Image.asset('lib/icons/wifi.png'),
@@ -41,9 +41,10 @@ const sexIcons = {
   Sex.unisex: Icons.roundabout_left,
 };
 
-class Room {
-  Room(
-      {required this.roomType,
+class RoomReservation {
+  RoomReservation(
+      {required this.id,
+      required this.roomType,
       required this.location,
       required this.sex,
       required this.amenities,
@@ -51,7 +52,7 @@ class Room {
       required this.address,
       required this.image});
   final RoomType roomType;
-
+  final String id;
   final List<String> location;
   final Sex sex;
   final int rent;
@@ -59,7 +60,9 @@ class Room {
   final String address;
   final List<String> image;
 
-  factory Room.fromJson(Map<String, dynamic> json) => Room(
+  factory RoomReservation.fromJson(Map<String, dynamic> json) =>
+      RoomReservation(
+        id: json['_id'],
         roomType:
             RoomType.values.firstWhere((type) => type.name == json['roomtype']),
         location: List<String>.from(json['location']),
@@ -74,67 +77,7 @@ class Room {
       );
 }
 
-List<Room> parseRoomsFromJson(String jsonString) {
+List<RoomReservation> parseReservationFromJson(String jsonString) {
   final List<dynamic> jsonList = jsonDecode(jsonString) as List<dynamic>;
-  return jsonList.map((json) => Room.fromJson(json)).toList();
+  return jsonList.map((json) => RoomReservation.fromJson(json)).toList();
 }
-
-// List<Room> Rooms = [
-//   Room(
-//       roomType: RoomType.premium,
-//       location: ['Chennai', 'Adambakkam'],
-//       sex: Sex.male,
-//       amenities: [
-//         Amenities.ac,
-//         Amenities.almirah,
-//         Amenities.cctv,
-//         Amenities.parking,
-//         Amenities.drinkingwater
-//       ],
-//       rent: 16200,
-//       address: '  No 4/5 1st Floor, Hello Colony , Adambakkam ,Chennai-600056 ',
-//       image: [
-//         'https://images.livspace-cdn.com/plain/https://jumanji.livspace-cdn.com/magazine/wp-content/uploads/sites/2/2022/06/10183457/small-bedroom-ideas.jpg',
-//         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSajn8L1P4PAvH_vr1aW2-2wuXlmal6qPWqajQIRxQAKg&s'
-//       ]),
-//   Room(
-//       roomType: RoomType.premium,
-//       location: ['Chennai', 'Adambakkam'],
-//       sex: Sex.male,
-//       amenities: [
-//         Amenities.ac,
-//         Amenities.almirah,
-//         Amenities.cctv,
-//         Amenities.parking,
-//         Amenities.drinkingwater
-//       ],
-//       rent: 16200,
-//       address: '  No 4/5 1st Floor, Hello Colony , Adambakkam ,Chennai-600056 ',
-//       image: [
-//         'https://images.livspace-cdn.com/plain/https://jumanji.livspace-cdn.com/magazine/wp-content/uploads/sites/2/2022/06/10183457/small-bedroom-ideas.jpg',
-//         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSajn8L1P4PAvH_vr1aW2-2wuXlmal6qPWqajQIRxQAKg&s'
-//       ]),
-// ];
-
-
-// factory Room.fromJson(Map<String, dynamic> json) {
-//     List<String> locationList = List<String>.from(json['location']);
-//     List<String> imageList = List<String>.from(json['image']);
-
-//     dynamic va = Room(
-//       roomType: RoomType.values
-//           .firstWhere((type) => type.toString() == json['roomtype']),
-//       location: locationList,
-//       sex: Sex.values.firstWhere((sex) => sex.toString() == json['sex']),
-//       rent: json['rent'],
-//       amenities: (json['amenities'] as List<dynamic>)
-//           .map((amenity) => Amenities.values
-//               .firstWhere((value) => value.toString() == amenity))
-//           .toList(),
-//       address: json['address'],
-//       image: imageList,
-//     );
-//     print(va);
-//     return va;
-//   }
-// }
