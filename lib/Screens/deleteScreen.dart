@@ -37,7 +37,7 @@ class _DeleteScreenState extends State<DeleteScreen> {
   Future<void> fetch() async {
     try {
       final response = await http
-          .get(Uri.parse('https://sore-jade-jay-wig.cyclic.app/yolo/rooms'));
+          .get(Uri.parse('https://odd-red-perch-ring.cyclic.app/yolo/rooms'));
       if (response.statusCode == 200) {
         setState(() {
           reservedRoom = parseReservationFromJson(response.body);
@@ -79,7 +79,7 @@ class _DeleteScreenState extends State<DeleteScreen> {
   void removeFav(String id) async {
     try {
       final response = await http
-          .delete(Uri.parse('https://sore-jade-jay-wig.cyclic.app/yolo/$id'));
+          .delete(Uri.parse('https://odd-red-perch-ring.cyclic.app/yolo/$id'));
       if (response.statusCode == 200) {
         setState(() {
           reservedRoom.removeWhere((room) => room.id == id); // Remove from list
@@ -367,7 +367,9 @@ class _DisplayRoomReservationState extends State<DisplayRoomReservation> {
                         flex: 5,
                         child: GridView.builder(
                           shrinkWrap: true,
-                          itemCount: roomObj.amenities.length,
+                          itemCount: roomObj.amenities.length < 4
+                              ? roomObj.amenities.length
+                              : 4,
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 4,
@@ -381,22 +383,20 @@ class _DisplayRoomReservationState extends State<DisplayRoomReservation> {
                             );
                           },
                         )),
-                    if (roomObj.amenities.length > 4)
-                      Expanded(
-                          child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            isExpanded = !isExpanded;
-                          });
-                        },
-                        child: CircleAvatar(
-                            backgroundColor:
-                                const Color.fromARGB(255, 96, 104, 189),
-                            foregroundColor: Colors.white,
-                            child: Center(
-                                child:
-                                    Text('+${roomObj.amenities.length - 4}'))),
-                      ))
+                    Expanded(
+                        child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          isExpanded = !isExpanded;
+                        });
+                      },
+                      child: CircleAvatar(
+                          backgroundColor:
+                              const Color.fromARGB(255, 96, 104, 189),
+                          foregroundColor: Colors.white,
+                          child: Center(
+                              child: Text('+${roomObj.amenities.length - 4}'))),
+                    ))
                   ],
                 ),
               ),

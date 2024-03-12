@@ -38,7 +38,7 @@ class _CheckScreenState extends State<CheckScreen> {
   Future<void> fetch() async {
     try {
       final response = await http.get(
-          Uri.parse('https://sore-jade-jay-wig.cyclic.app/validate/rooms'));
+          Uri.parse('https://odd-red-perch-ring.cyclic.app/validate/rooms'));
       if (response.statusCode == 200) {
         setState(() {
           reservedRoom = parseReservationFromJson(response.body);
@@ -80,7 +80,7 @@ class _CheckScreenState extends State<CheckScreen> {
   void removeFav(String id) async {
     try {
       final response = await http.delete(
-          Uri.parse('https://sore-jade-jay-wig.cyclic.app/validate/$id'));
+          Uri.parse('https://odd-red-perch-ring.cyclic.app/validate/$id'));
       if (response.statusCode == 200) {
         setState(() {
           reservedRoom.removeWhere((room) => room.id == id); // Remove from list
@@ -351,7 +351,9 @@ class _DisplayRoomReservationState extends State<DisplayRoomReservation> {
                         flex: 5,
                         child: GridView.builder(
                           shrinkWrap: true,
-                          itemCount: roomObj.amenities.length,
+                          itemCount: roomObj.amenities.length < 4
+                              ? roomObj.amenities.length
+                              : 4,
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 4,
@@ -365,7 +367,7 @@ class _DisplayRoomReservationState extends State<DisplayRoomReservation> {
                             );
                           },
                         )),
-                    if (roomObj.amenities.length > 4)
+                    if (!(roomObj.amenities.length <= 4))
                       Expanded(
                           child: GestureDetector(
                         onTap: () {
