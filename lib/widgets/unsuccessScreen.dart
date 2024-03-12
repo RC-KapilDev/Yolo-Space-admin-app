@@ -2,8 +2,6 @@ import 'package:yolo_business/main.dart';
 import 'package:flutter/material.dart';
 
 class UnsuccessfulScreen extends StatelessWidget {
-  const UnsuccessfulScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,15 +11,15 @@ class UnsuccessfulScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Error icon
-            const Icon(
+            Icon(
               Icons.error_outline,
               color: Colors.white,
               size: 100.0,
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             // Error message
-            const Text(
-              'Room Detail Entered is  UnSuccessful',
+            Text(
+              'Room Detail Entred is  UnSuccessful',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 24,
@@ -29,7 +27,7 @@ class UnsuccessfulScreen extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
             // Button to navigate back or retry
             ElevatedButton(
               onPressed: () {
@@ -37,11 +35,11 @@ class UnsuccessfulScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const MyApp(),
+                    builder: (context) => MyApp(),
                   ),
                 );
               },
-              child: const Text('Retry'),
+              child: Text('Retry'),
             ),
           ],
         ),

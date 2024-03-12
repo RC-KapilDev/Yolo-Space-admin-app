@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
-import 'package:flutter/services.dart';
 import 'package:yolo_business/Screens/checkscreen.dart';
 import 'package:yolo_business/Screens/deleteScreen.dart';
 import 'package:yolo_business/widgets/carousel.dart';
@@ -20,10 +19,6 @@ import 'model/dataModel.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
   Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MaterialApp(
     debugShowCheckedModeBanner: false,
@@ -117,7 +112,7 @@ class MyAppState extends State<MyApp> {
     print(jsonData);
 
     // Set up the POST request
-    var url = Uri.parse('https://odd-red-perch-ring.cyclic.app/validate/room');
+    var url = Uri.parse('https://sore-jade-jay-wig.cyclic.app/validate/room');
     var response = await http.post(
       url,
       headers: <String, String>{
@@ -140,7 +135,7 @@ class MyAppState extends State<MyApp> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const UnsuccessfulScreen(),
+          builder: (context) => UnsuccessfulScreen(),
         ),
       );
     }

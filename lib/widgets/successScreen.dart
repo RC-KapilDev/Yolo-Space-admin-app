@@ -47,7 +47,7 @@ class SuccessScreen extends StatelessWidget {
             const SizedBox(height: 20),
             // Success message
             const Text(
-              'Room Detail Entered is  Successful',
+              'Room Detail Entred is  Successful',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 24,
