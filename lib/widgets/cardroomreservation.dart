@@ -65,16 +65,16 @@ class RoomCardResrvation extends StatelessWidget {
                             fontWeight: FontWeight.w700),
                         textAlign: TextAlign.center,
                       ),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: room.location.length > 2 ? 2 : 1,
-                        itemBuilder: (context, index) {
-                          return Text(
-                            room.location[0],
-                            style: const TextStyle(color: Colors.black),
-                          );
-                        },
-                      )
+                      Text(
+                        room.location[0].trim(),
+                        style: const TextStyle(color: Colors.black),
+                      ),
+                      if (!(room.location.length > 2 ||
+                          room.location.length == 1))
+                        Text(
+                          room.location[1].trim(),
+                          style: const TextStyle(color: Colors.black),
+                        ),
                     ],
                   ),
                   Container(

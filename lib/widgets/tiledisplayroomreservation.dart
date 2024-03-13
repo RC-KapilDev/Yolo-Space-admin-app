@@ -22,23 +22,34 @@ class DisplayRoomTileReservation extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                child: Column(
-                  children: [
-                    Text(
-                      widget.room.roomType.name.toUpperCase(),
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 18,
-                          color: Colors.white),
-                    ),
-                    Text(
-                      widget.room.location[1],
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15,
-                          color: Colors.white),
-                    ),
-                  ],
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 60, top: 5, bottom: 5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.room.roomType.name.toUpperCase(),
+                        textAlign: TextAlign.start,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 18,
+                            color: Colors.white),
+                      ),
+                      Text(
+                        widget.room.location[0],
+                        textAlign: TextAlign.start,
+                        style:
+                            const TextStyle(fontSize: 12, color: Colors.white),
+                      ),
+                      if (!(widget.room.location.length > 2 ||
+                          widget.room.location.length == 1))
+                        Text(
+                          widget.room.location[1],
+                          style: const TextStyle(
+                              fontSize: 12, color: Colors.white),
+                        ),
+                    ],
+                  ),
                 ),
               ),
               Expanded(
