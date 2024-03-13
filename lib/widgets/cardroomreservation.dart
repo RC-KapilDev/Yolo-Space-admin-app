@@ -9,6 +9,14 @@ class RoomCardResrvation extends StatelessWidget {
   final RoomReservation room;
   final void Function(RoomReservation room, BuildContext context) onTap;
 
+  String _formatRent(int rent) {
+    if (rent >= 10000) {
+      return '${(rent ~/ 1000).toStringAsFixed(1)}k';
+    } else {
+      return rent.toString();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -57,15 +65,16 @@ class RoomCardResrvation extends StatelessWidget {
                             fontWeight: FontWeight.w700),
                         textAlign: TextAlign.center,
                       ),
-                      Text(
-                        room.location[0],
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(color: Colors.black),
-                      ),
-                      Text(
-                        room.location[1],
-                        style: const TextStyle(color: Colors.black),
-                      ),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: room.location.length > 2 ? 2 : 1,
+                        itemBuilder: (context, index) {
+                          return Text(
+                            room.location[0],
+                            style: const TextStyle(color: Colors.black),
+                          );
+                        },
+                      )
                     ],
                   ),
                   Container(
@@ -93,7 +102,7 @@ class RoomCardResrvation extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            room.rent.toString(),
+                            _formatRent(room.rent),
                             style: const TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.w600),
                           ),
