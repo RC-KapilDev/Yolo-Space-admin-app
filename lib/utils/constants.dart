@@ -1,3 +1,3 @@
 class Constants {
-  static String uri = 'https://odd-red-perch-ring.cyclic.app';
+  static String uri = 'http://192.168.56.1:3000';
 }
