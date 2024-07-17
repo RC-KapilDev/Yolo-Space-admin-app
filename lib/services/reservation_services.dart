@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:yolo_business/utils/constants.dart';
 import '/model/dataModel.dart';
 
 class ReservationServices {
@@ -22,8 +23,7 @@ class ReservationServices {
       };
 
       http.Response response = await http.delete(
-        Uri.parse(
-            'https://sore-jade-jay-wig.cyclic.app/validate/approve/${room.id}'),
+        Uri.parse('${Constants.uri}/validate/approve/${room.id}'),
         body: json.encode(resevation),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
